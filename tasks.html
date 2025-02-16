@@ -1,0 +1,155 @@
+{{define "Tasks"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Task List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Task</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="taskList"></tbody>
+        </table>
+        <button onclick="goBack()">Back</button>
+    </div>
+
+    <script>
+        // function loadTasks() {
+        //     let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        //     let taskList = document.getElementById("taskList");
+        //     taskList.innerHTML = "";
+
+        //     tasks.forEach((item, index) => {
+        //         let row = document.createElement("tr");
+
+        //         row.innerHTML = `
+        //             <td><input type="checkbox" onchange="toggleTask(${index})" ${item.completed ? "checked" : ""}></td>
+        //             <td class="${item.completed ? 'completed' : ''}">${item.task}</td>
+        //             <td>${item.date}</td>
+        //             <td>
+        //                 <button onclick="editTask(${index})">Edit</button>
+        //                 <button onclick="deleteTask(${index})">Delete</button>
+        //             </td>
+        //         `;
+
+        //         taskList.appendChild(row);
+        //     });
+        // }
+
+        // function deleteTask(index) {
+        //     let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        //     tasks.splice(index, 1);
+        //     localStorage.setItem("tasks", JSON.stringify(tasks));
+        //     loadTasks();
+        // }
+
+        // function editTask(index) {
+        //     localStorage.setItem("editIndex", index);
+        //     window.location.href = "edit.html";
+        // }
+
+        // function toggleTask(index) {
+        //     let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        //     tasks[index].completed = !tasks[index].completed;
+        //     localStorage.setItem("tasks", JSON.stringify(tasks));
+        //     loadTasks();
+        // }
+
+        // function goBack() {
+        //     window.location.href = "index.html";
+        // }
+
+        // window.onload = loadTasks;
+
+        //using Ajax
+
+//         function loadTasks() {
+//         put("http://localhost:4002/getTasks", {
+//         method: "GET",
+//         headers: {
+//             "Content-Type": "application/json"
+//         }
+//     })
+//     .then(response => response.json())
+//     .then(tasks => {
+//         let taskList = document.getElementById("taskList");
+//         taskList.innerHTML = "";
+
+//         tasks.forEach((item) => {
+//             let row = document.createElement("tr");
+
+//             row.innerHTML = `
+//                 <td><input type="checkbox" onchange="toggleTask(${item.id})" ${item.completed ? "checked" : ""}></td>
+//                 <td class="${item.completed ? 'completed' : ''}">${item.task}</td>
+//                 <td>${item.date}</td>
+//                 <td>
+//                     <button onclick="editTask(${item.id}, '${item.task}', '${item.date}')">Edit</button>
+//                     <button onclick="deleteTask(${item.id})">Delete</button>
+//                 </td>
+//             `;
+
+//             taskList.appendChild(row);
+//         });
+//     })
+//     .catch(error => console.error("Error fetching tasks:", error));
+// }
+
+fetch("http://localhost:4002/IndexTodo")
+.then(response=>response.json())
+.then((data)=>console.log(data));
+
+function deleteTask(id) {
+    fetch("http://localhost:4002/deleteTask", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id: id })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Task deleted:", data);
+        loadTasks();
+    })
+    .catch(error => console.error("Error deleting task:", error));
+}
+
+function editTask(id, task, date) {
+    localStorage.setItem("editTaskId", id);
+    localStorage.setItem("editTaskText", task);
+    localStorage.setItem("editTaskDate", date);
+    window.location.href = "edit.html";
+}
+
+function toggleTask(id) {
+    fetch("http://localhost:4002/toggleTask", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id: id })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Task status updated:", data);
+        loadTasks();
+    })
+    .catch(error => console.error("Error updating task status:", error));
+}
+
+window.onload = loadTasks;
+    </script>
+</body>
+</html>
+{{end}}

@@ -1,0 +1,68 @@
+{{define "toDoListShowTask"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Task List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>CheckBox</th>
+                    <th>Task</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="taskList"></tbody>
+        </table>
+        <button onclick="goBack()">Back</button>
+    </div>
+
+    <script>
+    //     function viewTask() {
+    //         let xhr=new XMLHttpRequest();
+    //         xhr.open("GET","toDoListShowTask",true);
+    //         xhr.onload = function () {
+    //         let taskList = document.getElementById("taskList");
+    //         taskList.innerHTML = "Successfully added"
+
+    //         }
+    //         tasks.forEach((item, index) => {
+    //             let row = document.createElement("tr");
+    //             row.innerHTML = `
+    //                 <td><input type="checkbox" onchange="toggleTask(${index})" ${item.completed ? "checked" : ""}></td>
+    //                 <td class="${item.completed ? 'completed' : ''}">${item.task}</td>
+    //                 <td>${item.date}</td>
+    //                 <td>
+    //                     <button onclick="editTask(${index})">Edit</button>
+    //                     <button onclick="deleteTask(${index})">Delete</button>
+    //                 </td>
+    //             `;
+    //             taskList.appendChild(row);
+    //         });
+    //     };
+    // xhr.send();
+
+    //     function deleteTask(index) {
+            
+    //     }
+
+    //     function editTask(index) {
+        
+    //     }
+
+    //     function toggleTask(index) {
+            
+    //     }
+
+    
+    </script>
+</body>
+</html>
+{{end}}

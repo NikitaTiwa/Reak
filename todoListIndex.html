@@ -1,0 +1,77 @@
+{{define "todoList"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+</head>
+<body>
+    <form method="POST">
+    <div class="container">
+        <h2>To-Do List</h2>
+        <!-- <label for="id">Id</label>
+        <input type="number" id="id"> -->
+
+        <label for="task">Task:</label>
+        <input type="text" id="task" placeholder="Enter your task">
+        
+        <label for="date">Date:</label>
+        <input type="date" id="date">
+        <button onclick="addTask()">Add Task</button>
+        <p id="myTask"></p>
+    </div>
+</form>
+        <script>
+        function addTask() {
+            let task = document.getElementById('task').value;
+            let date = document.getElementById('date').value;
+
+            if (task === "" || date === "") {
+                alert("Please enter a task and date.");
+                return;
+            }
+            console.log("My Task added successfully")
+        }
+        //     let xhr=new XMLHttpRequest();
+        //     xhr.onreadystatechange = function () {
+        //     if (xhr.status === 200) {
+        //         alert("Your task has been sent successfully.");
+        //     } else {
+        //         alert("Your task was not sent successfully.");
+        //         console.error(xhr.responseText);
+        //     }
+        // };
+        // xhr.onerror = function () {
+        //     alert("An error occurred while submitting the task.");
+        // };
+        //     xhr.open("POST","todoList",true)
+        //     xhr.send(JSON.stringify(data));
+        // }
+        // console.log("Connection established");
+
+        fetch("http://localhost:4002/todoList")
+        .then(response => response.json())
+        .then((data)=>console.log(data));
+
+        //Insert data 
+        var obj={
+        title: document.getElementById("task").value,
+        body: document.getElementById("date").value,
+        userId: document.getElementById("id").value,
+    };
+    fetch('http://localhost:4002/todoList', {
+  method: 'POST',
+  body: JSON.stringify(obj),
+  headers: {
+    'Content-type': 'application/json;'
+  },
+})
+  .then((response) => response.json())
+  .then((json) => console.log(json));
+
+    </script>
+</body>
+</html>
+{{end}}
