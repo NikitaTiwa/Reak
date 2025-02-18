@@ -1,0 +1,116 @@
+{{define "IndexTodo"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+</head>
+<body>
+    <div class="container">
+        <h2>To-Do List add </h2>
+        <label for="task">Task:</label>
+        <input type="text" id="task" name="task" placeholder="Enter your task">
+        
+        <label for="date">Date:</label>
+        <input type="date" name="date" id="date">
+
+        <input type="submit"id="saveform">
+
+        <button onclick="loadTasks()">View Task</button>
+    </div>
+    <script>
+// Add Task
+document.getElementById("saveform").addEventListener("click",function(e){
+      console.log("clicked");
+   var obj={
+        Task: document.getElementById("task").value,
+        Date: document.getElementById("date").value
+    };
+  fetch('http://localhost:4002/IndexTodo', {
+    method: 'POST',
+    body: JSON.stringify(obj),
+    headers: {
+       'Content-type': 'application/json;'
+  },
+})
+  .then((response) => response.json())
+  .then((data) => {
+        console.log(data);
+        alert("Task added successfully");
+        document.getElementById("task").value = '';
+        document.getElementById("date").value = '';
+    })
+//     .catch((error) => {
+//         console.error("Error adding task:", error);
+//   });
+});
+
+function loadTasks() {
+        fetch("http://localhost:4002/tasks", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(tasks => {
+        let taskList = document.getElementById("taskList");
+        taskList.innerHTML = "";
+
+        tasks.forEach((item) => {
+            let row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${item.id}</td>
+                <td>${item.task}</td>
+                <td>${item.date}</td>
+                <td>
+                    <button onclick="editTask(${item.id}, '${item.task}', '${item.date}')">Edit</button>
+                    <button onclick="deleteTask(${item.id})">Delete</button>
+                </td>
+            `;
+
+            taskList.appendChild(row);
+        });
+    })
+    .catch(error => console.error("Error fetching tasks:", error));
+    // location.replace("https://localhost:4002/tasks");
+}
+
+// function loadTasks() {
+//     console.log("Show Task");
+    
+
+//view task
+
+// document.getElementById("view").addEventListener("click",function(e){
+//     console.log("Show Task");
+//     // var obj={
+//     //     Task: document.getElementById("task").value,
+//     //     Date: document.getElementById("date").value
+//     // };
+//     fetch('http://localhost:4002/tasks', {
+//         method: 'GET',
+//         // body: JSON.stringify(obj),
+//         headers: {
+//             'Content-type': 'application/json;'
+//         },
+//     })
+//         .then((response) => response.json())
+//         .then((data) => {
+//             console.log(data);
+//             displayTask(data);
+//         })
+//         .catch((error) =>{ 
+//             console.error("Error fetching tasks:", error);
+//             alert("failed to fetch tasks.");
+    
+//      });
+// });
+
+</script>
+</body>
+</html>
+{{end}}
